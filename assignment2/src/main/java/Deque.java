@@ -1,11 +1,13 @@
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class Deque<Item> implements Iterable<Item> {
+    private Node head = null;
+    private Node tail = null;
     /**
      * Constructs an empty deque.
      */
     public Deque() {
-        throw new UnsupportedOperationException("Not implemented.");
     }
 
     public static void main(String[] args) {
@@ -18,7 +20,7 @@ public class Deque<Item> implements Iterable<Item> {
      * @return true if it is empty, false otherwise
      */
     public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not implemented.");
+        return head == null;
     }
 
     /**
@@ -27,7 +29,11 @@ public class Deque<Item> implements Iterable<Item> {
      * @return a number of items on the deque
      */
     public int size() {
-        throw new UnsupportedOperationException("Not implemented.");
+        int sz = 0;
+        for (Node curr = head; curr != null; curr = curr.next) {
+            sz++;
+        }
+        return sz;
     }
 
     /**
@@ -36,7 +42,14 @@ public class Deque<Item> implements Iterable<Item> {
      * @param item item to insert
      */
     public void addFirst(Item item) {
-        throw new UnsupportedOperationException("Not implemented.");
+        if (item == null) {
+            throw new NullPointerException("`item` is null.");
+        }
+        Node newNode = new Node(item, null, head);
+        head = newNode;
+        if (tail == null) {
+            tail = head;
+        }
     }
 
     /**
@@ -45,7 +58,14 @@ public class Deque<Item> implements Iterable<Item> {
      * @param item item to insert
      */
     public void addLast(Item item) {
-        throw new UnsupportedOperationException("Not implemented.");
+        if (item == null) {
+            throw new NullPointerException("`item` is null.");
+        }
+        Node newNode = new Node(item, tail, null);
+        tail = newNode;
+        if (head == null) {
+            head = tail;
+        }
     }
 
     /**
@@ -54,7 +74,15 @@ public class Deque<Item> implements Iterable<Item> {
      * @return removed item
      */
     public Item removeFirst() {
-        throw new UnsupportedOperationException("Not implemented.");
+        if (isEmpty()) {
+            throw new NoSuchElementException("Empty deque.");
+        }
+        Node removed = head;
+        head = removed.next;
+        if (head == null) {
+            tail = null;
+        }
+        return removed.item;
     }
 
     /**
@@ -63,7 +91,15 @@ public class Deque<Item> implements Iterable<Item> {
      * @return removed item
      */
     public Item removeLast() {
-        throw new UnsupportedOperationException("Not implemented.");
+        if (isEmpty()) {
+            throw new NoSuchElementException("Empty deque.");
+        }
+        Node removed = tail;
+        tail = removed.prev;
+        if (tail == null) {
+            head = null;
+        }
+        return removed.item;
     }
 
     /**
@@ -72,6 +108,41 @@ public class Deque<Item> implements Iterable<Item> {
      * @return iterator over items
      */
     public Iterator<Item> iterator() {
-        throw new UnsupportedOperationException("Not implemented.");
+        return new Iterator<Item>() {
+            private Node current = head;
+
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+
+            @Override
+            public Item next() {
+                if (current == null) {
+                    throw new NoSuchElementException("Empty deque.");
+                } else {
+                    Item item = current.item;
+                    current = current.next;
+                    return item;
+                }
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException("Not implemented.");
+            }
+        };
+    }
+
+    private final class Node {
+        private Item item;
+        private Node prev;
+        private Node next;
+
+        public Node(Item item, Node prev, Node next) {
+            this.item = item;
+            this.prev = prev;
+            this.next = next;
+        }
     }
 }
