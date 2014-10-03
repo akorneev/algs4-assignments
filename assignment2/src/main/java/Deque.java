@@ -45,8 +45,10 @@ public class Deque<Item> implements Iterable<Item> {
         if (item == null) {
             throw new NullPointerException("`item` is null.");
         }
-        Node newNode = new Node(item, null, head);
-        head = newNode;
+        head = new Node(item, null, head);
+        if (head.next != null) {
+            head.next.prev = head;
+        }
         if (tail == null) {
             tail = head;
         }
@@ -61,8 +63,8 @@ public class Deque<Item> implements Iterable<Item> {
         if (item == null) {
             throw new NullPointerException("`item` is null.");
         }
-        Node newNode = new Node(item, tail, null);
-        tail = newNode;
+        tail = new Node(item, tail, null);
+        if (tail.prev != null) tail.prev.next = tail;
         if (head == null) {
             head = tail;
         }
@@ -81,6 +83,8 @@ public class Deque<Item> implements Iterable<Item> {
         head = removed.next;
         if (head == null) {
             tail = null;
+        } else {
+            head.prev = null;
         }
         return removed.item;
     }
@@ -98,6 +102,8 @@ public class Deque<Item> implements Iterable<Item> {
         tail = removed.prev;
         if (tail == null) {
             head = null;
+        } else {
+            tail.next = null;
         }
         return removed.item;
     }
@@ -143,6 +149,13 @@ public class Deque<Item> implements Iterable<Item> {
             this.item = item;
             this.prev = prev;
             this.next = next;
+        }
+
+        @Override
+        public String toString() {
+            String p = (prev == null) ? "null" : prev.item.toString();
+            String n = (next == null) ? "null" : next.item.toString();
+            return p + " <- " + item.toString() + " -> " + n;
         }
     }
 }
