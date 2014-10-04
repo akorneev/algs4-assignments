@@ -6,6 +6,18 @@
  */
 public class Subset {
     public static void main(String[] args) {
-        throw new UnsupportedOperationException("Not implemented.");
+        if (args.length != 1) {
+            StdOut.println("Usage: java Subset <k>");
+        } else {
+            int k = Integer.parseInt(args[0]);
+            RandomizedQueue<String> queue = new RandomizedQueue<>();
+            String[] allStrings = StdIn.readAllStrings();
+            for (String s : allStrings) {
+                queue.enqueue(s);
+            }
+            for (int i = 0; i < k; ++i) {
+                StdOut.println(queue.dequeue());
+            }
+        }
     }
 }
