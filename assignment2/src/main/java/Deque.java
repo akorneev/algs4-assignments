@@ -114,30 +114,36 @@ public class Deque<Item> implements Iterable<Item> {
      * @return iterator over items
      */
     public Iterator<Item> iterator() {
-        return new Iterator<Item>() {
-            private Node current = head;
+        return new DequeIterator();
+    }
 
-            @Override
-            public boolean hasNext() {
-                return current != null;
-            }
+    private final class DequeIterator implements Iterator<Item> {
+        private Node current;
 
-            @Override
-            public Item next() {
-                if (current == null) {
-                    throw new NoSuchElementException("Empty deque.");
-                } else {
-                    Item item = current.item;
-                    current = current.next;
-                    return item;
-                }
-            }
+        public DequeIterator() {
+            current = head;
+        }
 
-            @Override
-            public void remove() {
-                throw new UnsupportedOperationException("Not implemented.");
+        @Override
+        public boolean hasNext() {
+            return current != null;
+        }
+
+        @Override
+        public Item next() {
+            if (current == null) {
+                throw new NoSuchElementException("Empty deque.");
+            } else {
+                Item item = current.item;
+                current = current.next;
+                return item;
             }
-        };
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException("Not implemented.");
+        }
     }
 
     private final class Node {
@@ -153,8 +159,12 @@ public class Deque<Item> implements Iterable<Item> {
 
         @Override
         public String toString() {
-            String p = (prev == null) ? "null" : prev.item.toString();
-            String n = (next == null) ? "null" : next.item.toString();
+            String p;
+            if (prev == null) p = "null";
+            else p = prev.item.toString();
+            String n;
+            if (next == null) n = "null";
+            else n = next.item.toString();
             return p + " <- " + item.toString() + " -> " + n;
         }
     }
