@@ -5,8 +5,10 @@ public class Point implements Comparable<Point> {
      * Compares points by slope to this point.
      */
     public final Comparator<Point> SLOPE_ORDER = new Comparator<Point>() {
-        public int compare(Point o1, Point o2) {
-            throw new UnsupportedOperationException("Not implemented.");
+        public int compare(Point p0, Point p1) {
+            double s0 = Point.this.slopeTo(p0);
+            double s1 = Point.this.slopeTo(p1);
+            return Double.compare(s0, s1);
         }
     };
     private final int x;
@@ -41,13 +43,25 @@ public class Point implements Comparable<Point> {
     }
 
     public int compareTo(Point that) {
-        throw new UnsupportedOperationException("Not implemented.");
+        if (this.y == that.y) {
+            if (this.x == that.x) return 0;
+            else if (this.x < that.x) return -1;
+            else return 1;
+        } else if (this.y < that.y) return -1;
+        else return 1;
     }
 
     /**
      * Returns the slope between this point and that point.
      */
     public double slopeTo(Point that) {
-        throw new UnsupportedOperationException("Not implemented.");
+        if (this.x == that.x) {
+            if (this.y == that.y) return Double.NEGATIVE_INFINITY;
+            else return Double.POSITIVE_INFINITY;
+        } else if (this.y == that.y) {
+            return +.0;
+        } else {
+            return (double) (that.y - this.y) / (that.x - this.x);
+        }
     }
 }
